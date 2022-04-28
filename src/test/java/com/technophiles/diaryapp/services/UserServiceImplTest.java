@@ -29,4 +29,25 @@ class UserServiceImplTest {
         assertThat(id).isNotNull();
     }
 
+    @Test
+    void testThatUserCanBeFound(){
+        CreateAccountRequest accountRequest = CreateAccountRequest.builder()
+                .email("lotA@gmail.com")
+                .password("password")
+                .build();
+
+        String id = userService.createAccount(accountRequest);
+        assertThat(id).isNotNull();
+
+        CreateAccountRequest accountRequest2 =  CreateAccountRequest.builder()
+                .email("ngozi@gmail.com")
+                .password("ngiri")
+                .build();
+
+        String id2 = userService.createAccount(accountRequest2);
+        assertThat(id2).isNotNull();
+
+
+    }
+
 }
