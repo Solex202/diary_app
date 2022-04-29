@@ -9,6 +9,7 @@ import com.technophiles.diaryapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -46,6 +47,11 @@ public class UserServiceImpl implements UserService{
                throw new UserNotFoundException("user not found");
             }
         return response;
+    }
+
+    @Override
+    public List<User> findAllUser() {
+        return userRepository.findAll();
     }
 
 //    @Override

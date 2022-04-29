@@ -65,14 +65,16 @@ class UserServiceImplTest {
                 .password("password")
                 .build();
 
-        String id = userService.createAccount(accountRequest);
+         userService.createAccount(accountRequest);
 
         CreateAccountRequest accountRequest2 =  CreateAccountRequest.builder()
                 .email("ngozi@gmail.com")
                 .password("ngiri")
                 .build();
 
-        String id2 = userService.createAccount(accountRequest2);
+         userService.createAccount(accountRequest2);
+
+        assertThat(userService.findAllUser().size(), is(2));
     }
 
     @AfterEach
