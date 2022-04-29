@@ -1,6 +1,7 @@
 package com.technophiles.diaryapp.services;
 
 import com.technophiles.diaryapp.controllers.request.CreateAccountRequest;
+import com.technophiles.diaryapp.controllers.response.DeleteUserResponse;
 import com.technophiles.diaryapp.controllers.response.FindUserResponse;
 import com.technophiles.diaryapp.exceptions.DiaryApplicationException;
 import com.technophiles.diaryapp.exceptions.UserNotFoundException;
@@ -54,11 +55,20 @@ public class UserServiceImpl implements UserService{
         return userRepository.findAll();
     }
 
-//    @Override
-//    public CreateAccountResponse findUserById(String id) {
-//        Optional<User> optionalUser = userRepository.findById(id);
-//        CreateAccountResponse response = new CreateAccountResponse();
-//
-//        return null;
-//    }
+    @Override
+    public DeleteUserResponse deleteUser(String id) {
+        boolean optionalUser = userRepository.existsById(id);
+        DeleteUserResponse response = new DeleteUserResponse();
+        if(optionalUser){
+            userRepository.deleteById(id);
+            response.setMessage("deleted");
+        }else{
+            response.setMessage("user not found");
+        }
+        return response;
+    }
+
+
+
+
 }

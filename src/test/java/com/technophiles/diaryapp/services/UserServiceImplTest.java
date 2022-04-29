@@ -1,6 +1,7 @@
 package com.technophiles.diaryapp.services;
 
 import com.technophiles.diaryapp.controllers.request.CreateAccountRequest;
+import com.technophiles.diaryapp.controllers.response.DeleteUserResponse;
 import com.technophiles.diaryapp.controllers.response.FindUserResponse;
 import com.technophiles.diaryapp.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -75,6 +76,29 @@ class UserServiceImplTest {
          userService.createAccount(accountRequest2);
 
         assertThat(userService.findAllUser().size(), is(2));
+    }
+
+    @Test
+    public void testThatUserCanBeDeleted(){
+        CreateAccountRequest accountRequest = CreateAccountRequest.builder()
+                .email("deoala@gmail.com")
+                .password("password")
+                .build();
+
+        String id = userService.createAccount(accountRequest);
+
+        CreateAccountRequest accountRequest2 =  CreateAccountRequest.builder()
+                .email("ngozi@gmail.com")
+                .password("ngiri")
+                .build();
+
+        String id2 = userService.createAccount(accountRequest2);
+
+        assertThat(userService.findAllUser().size(), is(2));
+
+        DeleteUserResponse deleteResponse = userService.deleteUser(id);
+        assertThat(userService.findAllUser().size(), is(1));
+
     }
 
     @AfterEach
