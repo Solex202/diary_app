@@ -3,6 +3,7 @@ package com.technophiles.diaryapp.models;
 
 import lombok.*;
 import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

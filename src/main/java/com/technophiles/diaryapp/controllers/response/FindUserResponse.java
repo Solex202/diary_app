@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateAccountResponse {
+public class FindUserResponse {
 
     private String message;
 }

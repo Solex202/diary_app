@@ -1,7 +1,9 @@
 package com.technophiles.diaryapp.services;
 
 import com.technophiles.diaryapp.controllers.request.CreateAccountRequest;
-import com.technophiles.diaryapp.controllers.response.CreateAccountResponse;
+import com.technophiles.diaryapp.controllers.response.FindUserResponse;
+import com.technophiles.diaryapp.repositories.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -13,11 +15,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-@SpringBootTest
+@DataMongoTest
 @ImportAutoConfiguration(exclude = EmbeddedMongoAutoConfiguration.class)
 class UserServiceImplTest {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository repo;
 
 
 
@@ -35,7 +40,7 @@ class UserServiceImplTest {
     @Test
     void testThatUserCanBeFound(){
         CreateAccountRequest accountRequest = CreateAccountRequest.builder()
-                .email("lotA@gmail.com")
+                .email("deoala@gmail.com")
                 .password("password")
                 .build();
 
@@ -48,12 +53,31 @@ class UserServiceImplTest {
 
         String id2 = userService.createAccount(accountRequest2);
 
-        CreateAccountResponse accountResponse = userService.findById(id2);
+        FindUserResponse accountResponse = userService.findUserById(id2);
 
         assertThat(accountResponse.getMessage(), is("user found"));
+    }
 
+    @Test
+    public void testThatAllUsersCanBeFound(){
+        CreateAccountRequest accountRequest = CreateAccountRequest.builder()
+                .email("deoala@gmail.com")
+                .password("password")
+                .build();
 
+        String id = userService.createAccount(accountRequest);
 
+        CreateAccountRequest accountRequest2 =  CreateAccountRequest.builder()
+                .email("ngozi@gmail.com")
+                .password("ngiri")
+                .build();
+
+        String id2 = userService.createAccount(accountRequest2);
+    }
+
+    @AfterEach
+    void tearDown(){
+        repo.deleteAll();
     }
 
 }

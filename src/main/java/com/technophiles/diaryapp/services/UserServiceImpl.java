@@ -1,8 +1,9 @@
 package com.technophiles.diaryapp.services;
 
 import com.technophiles.diaryapp.controllers.request.CreateAccountRequest;
-import com.technophiles.diaryapp.controllers.response.CreateAccountResponse;
+import com.technophiles.diaryapp.controllers.response.FindUserResponse;
 import com.technophiles.diaryapp.exceptions.DiaryApplicationException;
+import com.technophiles.diaryapp.exceptions.UserNotFoundException;
 import com.technophiles.diaryapp.models.User;
 import com.technophiles.diaryapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class UserServiceImpl implements UserService{
     public String createAccount(CreateAccountRequest accountRequestDto) {
         Optional<User> optionalUser = userRepository.findByEmail(accountRequestDto.getEmail());
         if(optionalUser.isPresent()){
-            throw new DiaryApplicationException("user is aalready present");
+            throw new DiaryApplicationException("user is already present");
         }
         User user = new User();
         user.setEmail(accountRequestDto.getEmail());
@@ -36,7 +37,22 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public CreateAccountResponse findById(String id2) {
-        return null;
+    public FindUserResponse findUserById(String id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        FindUserResponse response = new FindUserResponse();
+            if(optionalUser.isPresent()) {
+                response.setMessage("user found");
+            }else{
+               throw new UserNotFoundException("user not found");
+            }
+        return response;
     }
+
+//    @Override
+//    public CreateAccountResponse findUserById(String id) {
+//        Optional<User> optionalUser = userRepository.findById(id);
+//        CreateAccountResponse response = new CreateAccountResponse();
+//
+//        return null;
+//    }
 }
