@@ -1,9 +1,14 @@
 package com.technophiles.diaryapp.services;
 
 import com.technophiles.diaryapp.controllers.request.CreateAccountRequest;
+import com.technophiles.diaryapp.controllers.request.UpdateUserDTO;
 import com.technophiles.diaryapp.controllers.response.DeleteUserResponse;
 import com.technophiles.diaryapp.controllers.response.UserDto;
 import com.technophiles.diaryapp.exceptions.DiaryApplicationException;
+import com.technophiles.diaryapp.mapper.UserMapper;
+import com.technophiles.diaryapp.mapper.UserMapperImpl;
+import com.technophiles.diaryapp.models.Diary;
+import com.technophiles.diaryapp.models.User;
 import com.technophiles.diaryapp.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +32,7 @@ class UserServiceImplTest {
     @Autowired
     private UserRepository repo;
 
+    UserMapper userMapper = new UserMapperImpl();
 
 
     @Test
@@ -121,8 +127,14 @@ class UserServiceImplTest {
         String id2 = userService.createAccount(accountRequest2);
 
         assertThat(userService.findAllUser().size(), is(2));
-
-//        UpdateProfileRequest
+        UpdateUserDTO updateUserDTO = UpdateUserDTO.builder()
+                .password("new password")
+                .email("new email")
+                .build();
+        String result = userService.updateId(id, updateUserDTO);
+        assertThat(result).isEqualTo("user details updated successfully");
+        UserDto userDTO = userService.findUserById(id);
+        assertThat(userDTO.getEmail()).isEqualTo("new email");
     }
 
     @Test
@@ -144,15 +156,22 @@ class UserServiceImplTest {
 
         assertThatThrownBy(()->userService.createAccount(accountRequest2))
                 .isInstanceOf(DiaryApplicationException.class).hasMessage("user is already present");
-
-//        String id = userService.createAccount(accountRequest);
-
-
     }
+
     @Test
-    void testThatCanGetUserInformation(){
+    public void  testThatCanAddDiaryToUser(){
+        String userId = "";
+        User user = userService.findUserByIdInternal(userId);
+        String diaryTitle = "My new Diary";
+        Diary diary = new Diary(diaryTitle, user);
+
+        Diary savedDiary = userService.addNewDiary(userId,diary);
+
+        assertThat(savedDiary.getId()).isNotNull();
+        assertThat(savedDiary.getTitle()).isEqualTo("");
 
     }
+
 
     @AfterEach
     void tearDown(){
