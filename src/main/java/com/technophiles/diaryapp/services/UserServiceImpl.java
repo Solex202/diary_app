@@ -1,6 +1,7 @@
 package com.technophiles.diaryapp.services;
 
 import com.technophiles.diaryapp.controllers.request.CreateAccountRequest;
+import com.technophiles.diaryapp.controllers.response.CreateAccountResponse;
 import com.technophiles.diaryapp.exceptions.DiaryApplicationException;
 import com.technophiles.diaryapp.models.User;
 import com.technophiles.diaryapp.repositories.UserRepository;
@@ -32,5 +33,10 @@ public class UserServiceImpl implements UserService{
 
         User savedUser = userRepository.save(user);
         return savedUser.getId();
+    }
+
+    @Override
+    public CreateAccountResponse findById(String id2) {
+        return null;
     }
 }
